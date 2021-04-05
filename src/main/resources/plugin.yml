@@ -1,0 +1,9 @@
+name: AdvancementRace
+version: ${project.version}
+main: yt.ppg.advancementrace.Core
+api-version: 1.16
+authors: [Wising, Lymed, Electro, Bonzaii, Enderlew]
+website: ppg.yt
+commands:
+  game:
+    usage: "Usage: /game [start|reset]"
