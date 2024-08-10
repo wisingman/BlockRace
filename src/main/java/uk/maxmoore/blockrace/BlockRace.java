@@ -1,25 +1,23 @@
-package yt.ppg.blockrace;
+package uk.maxmoore.blockrace;
 
 import lombok.Getter;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import yt.ppg.blockrace.commands.GameCommand;
-import yt.ppg.blockrace.listeners.PlayerListener;
-import yt.ppg.blockrace.util.CC;
+import uk.maxmoore.blockrace.commands.GameCommand;
+import uk.maxmoore.blockrace.listeners.PlayerListener;
+import uk.maxmoore.blockrace.util.CC;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public final class Core extends JavaPlugin {
+public final class BlockRace extends JavaPlugin {
 
-    @Getter private static Core instance;
+    @Getter private static BlockRace instance;
     @Getter private final List<PlayerSettings> playerSettingsList = new ArrayList<>();
     @Getter private int timeLeft = 1200;
     @Getter private boolean gameStarted = false;
@@ -31,6 +29,8 @@ public final class Core extends JavaPlugin {
         // Plugin startup logic
         Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
         getCommand("game").setExecutor(new GameCommand());
+
+        loadMetrics();
 
         for (Material material : Material.values()) {
             String name = material.name().toLowerCase();
@@ -93,7 +93,7 @@ public final class Core extends JavaPlugin {
                         settings.endBossBar(winner);
                     }
 
-                    Bukkit.broadcastMessage(CC.translate("&6&l" + winner.getPlayer().getName() + " has won the game! Congratulations!"));
+                    Bukkit.broadcast(CC.translate("&6&l" + winner.getPlayer().getName() + " has won the game! Congratulations!"));
                     this.cancel();
                     return;
                 }
@@ -101,7 +101,7 @@ public final class Core extends JavaPlugin {
                 // loop
                 for (PlayerSettings settings : getPlayerSettingsList()) {
                     settings.bossBarLoop();
-                    settings.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(CC.translate("&6&lCurrent block - " + settings.getCurrentBlock().name().toUpperCase().replace("_", " "))));
+                    settings.getPlayer().sendActionBar(CC.translate("&6&lCurrent block - " + settings.getCurrentBlock().name().toUpperCase().replace("_", " ")));
                 }
 
                 timeLeft--;
@@ -109,7 +109,7 @@ public final class Core extends JavaPlugin {
         }.runTaskTimer(this, 0, 20);
     }
 
-    protected void loadMetrics() {
+    private void loadMetrics() {
         new Metrics(this, 10926);
     }
 }

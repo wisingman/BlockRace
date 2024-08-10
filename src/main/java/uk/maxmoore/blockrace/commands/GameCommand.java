@@ -1,11 +1,12 @@
-package yt.ppg.blockrace.commands;
+package uk.maxmoore.blockrace.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import yt.ppg.blockrace.Core;
+import uk.maxmoore.blockrace.BlockRace;
+import uk.maxmoore.blockrace.util.CC;
 
 public class GameCommand implements CommandExecutor {
     @Override
@@ -25,12 +26,12 @@ public class GameCommand implements CommandExecutor {
         String command = args[0].toLowerCase();
         switch (command) {
             case "start":
-                Core.getInstance().startGame(player);
+                BlockRace.getInstance().startGame(player);
                 break;
             case "reset":
                 player.sendMessage("Resetting...");
                 for (Player all : Bukkit.getOnlinePlayers()) {
-                    all.kickPlayer("Game is resetting (Requested by " + player.getName() + ")");
+                    all.kick(CC.translate("&cGame is resetting (Requested by " + player.getName() + ")"));
                 }
                 Bukkit.shutdown();
                 break;
